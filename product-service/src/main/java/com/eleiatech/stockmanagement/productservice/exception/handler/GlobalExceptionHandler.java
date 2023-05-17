@@ -2,6 +2,7 @@ package com.eleiatech.stockmanagement.productservice.exception.handler;
 
 import com.eleiatech.stockmanagement.productservice.exception.enums.FriendlyMessageCodes;
 import com.eleiatech.stockmanagement.productservice.exception.exceptions.ProductNotCreatedException;
+import com.eleiatech.stockmanagement.productservice.exception.exceptions.ProductNotFoundException;
 import com.eleiatech.stockmanagement.productservice.exception.utils.FriendlyMessageUtils;
 import com.eleiatech.stockmanagement.productservice.response.FriendlyMessage;
 import com.eleiatech.stockmanagement.productservice.response.InternalApiResponse;
@@ -26,5 +27,18 @@ public class GlobalExceptionHandler {
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .hasError(true)
                 .errorMessages(Collections.singletonList(productNotCreatedException.getMessage())).build();
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ProductNotFoundException.class)
+    public InternalApiResponse<String> handleProductNotFoundException(ProductNotFoundException productNotFoundException) {
+        return InternalApiResponse.<String>builder()
+                .friendlyMessage(FriendlyMessage.builder()
+                        .title(FriendlyMessageUtils.getFriendlyMessage(productNotFoundException.getLanguage(), FriendlyMessageCodes.ERROR))
+                        .description(FriendlyMessageUtils.getFriendlyMessage(productNotFoundException.getLanguage(), productNotFoundException.getFriendlyMessageCode()))
+                        .build())
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .hasError(true)
+                .errorMessages(Collections.singletonList(productNotFoundException.getMessage())).build();
     }
 }

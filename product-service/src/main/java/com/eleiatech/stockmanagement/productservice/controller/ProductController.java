@@ -1,8 +1,8 @@
 package com.eleiatech.stockmanagement.productservice.controller;
 
+import com.eleiatech.stockmanagement.productservice.converter.ProductConverter;
 import com.eleiatech.stockmanagement.productservice.enums.Language;
 import com.eleiatech.stockmanagement.productservice.exception.enums.FriendlyMessageCodes;
-import com.eleiatech.stockmanagement.productservice.exception.enums.IFriendlyMessageCode;
 import com.eleiatech.stockmanagement.productservice.exception.utils.FriendlyMessageUtils;
 import com.eleiatech.stockmanagement.productservice.repository.entity.Product;
 import com.eleiatech.stockmanagement.productservice.request.ProductCreateRequest;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/1.0/product")
 public class ProductController {
     private final IProductRepositoryService productRepositoryService;
+    private final ProductConverter productConverter;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/{language}/create")
@@ -30,7 +31,8 @@ public class ProductController {
         log.debug("[{}][createProduct] -> request: {}", this.getClass().getSimpleName(), productCreateRequest);
 
         Product product = productRepositoryService.createProduct(language, productCreateRequest);
-        ProductResponse productResponse = convertProductResponse(product);
+        ProductResponse productResponse = productConverter.productToProductResponse(product);
+
         log.debug("[{}][createProduct] -> response: {}", this.getClass().getSimpleName(), productResponse);
 
         return InternalApiResponse.<ProductResponse>builder()
@@ -43,14 +45,22 @@ public class ProductController {
                 .build();
     }
 
-    private ProductResponse convertProductResponse(Product product) {
-        return ProductResponse.builder()
-                .productId(product.getProductId())
-                .productName(product.getProductName())
-                .quantity(product.getQuantity())
-                .price(product.getPrice())
-                .productCreatedDate(product.getProductCreatedDate().getTime())
-                .productUpdatedDate(product.getProductUpdatedDate().getTime())
-                .build();
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/{language}/get/{productId}")
+    public InternalApiResponse<ProductResponse> getProduct(@PathVariable("language") Language language,
+                                                           @PathVariable("productId") Long productId) {
+
+        log.debug("[{}][getProduct] -> request productId: {}", this.getClass().getSimpleName(), productId);
+
+        Product product = productRepositoryService.getProduct(language, productId);
+        ProductResponse productResponse = productConverter.productToProductResponse(product);
+
+        log.debug("[{}][getProduct] -> response: {}", this.getClass().getSimpleName(), productResponse);
+
+        return InternalApiResponse.<ProductResponse>builder()
+                .httpStatus(HttpStatus.OK)
+                .hasError(false)
+                .payload(productResponse).build();
     }
+
 }
