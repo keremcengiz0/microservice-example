@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/eureka-server/eureka-server.iml" filepath="$PROJECT_DIR$/eureka-server/eureka-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/microservice-example.iml" filepath="$PROJECT_DIR$/.idea/microservice-example.iml" />
       <module fileurl="file://$PROJECT_DIR$/product-service/product-service.iml" filepath="$PROJECT_DIR$/product-service/product-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zuul-edge-server/zuul-edge-server.iml" filepath="$PROJECT_DIR$/zuul-edge-server/zuul-edge-server.iml" />
     </modules>
   </component>
 </project>
