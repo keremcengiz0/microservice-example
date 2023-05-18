@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class ProductNotFoundException extends RuntimeException {
     private final Language language;
-    private final IFriendlyMessageCode friendlyMessageCode;
+    private final transient IFriendlyMessageCode friendlyMessageCode;
 
     public ProductNotFoundException(Language language, IFriendlyMessageCode friendlyMessageCode, String message) {
         super(FriendlyMessageUtils.getFriendlyMessage(language, friendlyMessageCode));

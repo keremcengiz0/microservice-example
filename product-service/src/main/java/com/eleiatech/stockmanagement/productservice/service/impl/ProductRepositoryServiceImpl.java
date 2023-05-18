@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,12 +56,30 @@ public class ProductRepositoryServiceImpl implements IProductRepositoryService {
 
     @Override
     public List<Product> getProducts(Language language) {
-        return null;
+        log.debug("[{}][getProducts]", this.getClass().getSimpleName());
+        List<Product> products = productRepository.getAllByDeletedFalse();
+
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException(language, FriendlyMessageCodes.PRODUCT_NOT_FOUND_EXCEPTION, "Products not found");
+        }
+
+        log.debug("[{}][getProducts] -> response: {}", this.getClass().getSimpleName(), products);
+
+        return products;
     }
 
     @Override
     public Product updateProduct(Language language, Long productId, ProductUpdateRequest productUpdateRequest) {
-        return null;
+        log.debug("[{}][updateProduct] -> request productId: {}", this.getClass().getSimpleName(), productUpdateRequest);
+        Product product = getProduct(language, productId);
+        product.setProductName(productUpdateRequest.getProductName());
+        product.setQuantity(productUpdateRequest.getQuantity());
+        product.setPrice(productUpdateRequest.getPrice());
+        product.setProductCreatedDate(product.getProductCreatedDate());
+        product.setProductUpdatedDate(new Date());
+        Product productResponse = productRepository.save(product);
+        log.debug("[{}][updateProduct] -> response: {}", this.getClass().getSimpleName(), productResponse);
+        return productResponse;
     }
 
     @Override
