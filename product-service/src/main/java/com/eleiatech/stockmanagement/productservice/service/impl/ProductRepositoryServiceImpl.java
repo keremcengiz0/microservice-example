@@ -84,6 +84,18 @@ public class ProductRepositoryServiceImpl implements IProductRepositoryService {
 
     @Override
     public Product deleteProduct(Language language, Long productId) {
-        return null;
+        log.debug("[{}][deleteProduct] -> request productId: {}", this.getClass().getSimpleName(), productId);
+        Product product;
+
+        try {
+            product = getProduct(language, productId);
+            product.setDeleted(true);
+            product.setProductUpdatedDate(new Date());
+            Product productResponse = productRepository.save(product);
+            log.debug("[{}][deleteProduct] -> response: {}", this.getClass().getSimpleName(), productResponse);
+            return productResponse;
+        } catch (ProductNotFoundException productNotFoundException) {
+            throw new ProductNotFoundException(language, FriendlyMessageCodes.PRODUCT_ALREADY_DELETED, "Product already deleted product id: " + productId);
+        }
     }
 }

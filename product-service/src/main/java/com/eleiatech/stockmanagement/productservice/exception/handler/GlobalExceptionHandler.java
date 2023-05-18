@@ -1,6 +1,7 @@
 package com.eleiatech.stockmanagement.productservice.exception.handler;
 
 import com.eleiatech.stockmanagement.productservice.exception.enums.FriendlyMessageCodes;
+import com.eleiatech.stockmanagement.productservice.exception.exceptions.ProductAlreadyDeletedException;
 import com.eleiatech.stockmanagement.productservice.exception.exceptions.ProductNotCreatedException;
 import com.eleiatech.stockmanagement.productservice.exception.exceptions.ProductNotFoundException;
 import com.eleiatech.stockmanagement.productservice.exception.utils.FriendlyMessageUtils;
@@ -40,5 +41,18 @@ public class GlobalExceptionHandler {
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .hasError(true)
                 .errorMessages(Collections.singletonList(productNotFoundException.getMessage())).build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ProductAlreadyDeletedException.class)
+    public InternalApiResponse<String> handleProductAlreadyDeletedException(ProductAlreadyDeletedException productAlreadyDeletedException) {
+        return InternalApiResponse.<String>builder()
+                .friendlyMessage(FriendlyMessage.builder()
+                        .title(FriendlyMessageUtils.getFriendlyMessage(productAlreadyDeletedException.getLanguage(), FriendlyMessageCodes.ERROR))
+                        .description(FriendlyMessageUtils.getFriendlyMessage(productAlreadyDeletedException.getLanguage(), productAlreadyDeletedException.getFriendlyMessageCode()))
+                        .build())
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .hasError(true)
+                .errorMessages(Collections.singletonList(productAlreadyDeletedException.getMessage())).build();
     }
 }
