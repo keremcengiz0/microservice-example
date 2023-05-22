@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.eleiatech.stockmanagement.eurekaserver.EurekaServerApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.774 s - in com.eleiatech.stockmanagement.eurekaserver.EurekaServerApplicationTests
