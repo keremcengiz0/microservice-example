@@ -4,15 +4,22 @@ spring:
   profiles:
     active: localhost
 
+zuul:
+  routes:
+    product-service:
+      path: /api/1.0/product/**
+      serviceId: product-service
+      stripPrefix: false
+
+server:
+  port: 8762
 
 info:
   component: Zuul Edge Server
 
 ---
-
 spring:
-  profiles:
-    active: localhost
+  profiles: localhost
 
 eureka:
   client:
@@ -20,13 +27,16 @@ eureka:
       default-zone: http://localhost:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${random.uuid}
+---
 
-server:
-  port: 8762
+spring:
+  profiles: stage
 
-zuul:
-  routes:
-    product-service:
-      path: /api/1.0/product/**
-      serviceId: product-service
-      stripPrefix: false
+eureka:
+  client:
+    service-url:
+      default-zone: http://eureka-server:8761/eureka
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    instance-id: ${spring.application.name}:${random.uuid}
