@@ -31,6 +31,7 @@ public class ProductRepositoryServiceImpl implements ProductRepositoryService {
 
             if (optionalProduct.isPresent()) {
                 product = optionalProduct.get();
+                log.info("Data came from cache");
             } else {
                 log.info("Data came from product-service");
                 product = new Product();
