@@ -8,12 +8,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="product-service" />
+        <module name="product-cache-service" />
         <module name="eureka-server" />
         <module name="zuul-edge-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="eureka-server" target="11" />
+      <module name="product-cache-service" target="11" />
       <module name="product-service" target="11" />
       <module name="zuul-edge-server" target="11" />
     </bytecodeTargetLevel>
@@ -21,6 +23,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="eureka-server" options="-parameters" />
+      <module name="product-cache-service" options="-parameters" />
       <module name="product-service" options="-parameters" />
       <module name="zuul-edge-server" options="-parameters" />
     </option>
